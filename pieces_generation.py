@@ -38,14 +38,14 @@ def generate_cuts(num_cuts, a, b):
         cut = []
         # точка на оси х
         ch = random.randint(0, 1)
-        x = round(random.uniform(0.9, a - 0.9), 3)
+        x = round(random.uniform(40, a - 40), 3)
         y = choise_y[ch]
         cut.append([x, y])
 
         # точка на оси y
         ch = random.randint(0, 1)
         x = choise_x[ch]
-        y = round(random.uniform(0.9, b-0.9), 3)
+        y = round(random.uniform(25, b - 25), 3)
         cut.append([x, y])
         cuts.append(cut)
     return cuts
@@ -259,30 +259,36 @@ def get_pieces(cycles, points): #n, a, b):
        Вызывается из noNoiseSolution.py"""
 
     '''
-        # генерируем разрезы
-        cuts = generate_cuts(n, a, b)
-        print(cuts)
+    n = 6
+    a = 800
+    b = 400
 
-        # строим граф-матрицу смежности, массив всех точек
-        k, intersection_points, graph, points = get_graph_matrix(cuts, a, b)
-        print(points)
-        print(graph)
-        #for el in graph:
-            #print(el)
+    # генерируем разрезы
+    cuts = generate_cuts(n, a, b)
+    print(cuts)
 
-        # для каждой вершины ищем с какими другими вершинами она соединена
-        graph_as_list_of_lists = graph_as_a_list_of_lists(graph)
-        # ищем массивы точек, образующих выпуклые кусочки
-        cycles = get_all_cycles(graph, graph_as_list_of_lists)
+    # строим граф-матрицу смежности, массив всех точек
+    k, intersection_points, graph, points = get_graph_matrix(cuts, a, b)
+    print(points)
+    print(graph)
+    #for el in graph:
+        #print(el)
+    
+    # для каждой вершины ищем с какими другими вершинами она соединена
+    graph_as_list_of_lists = graph_as_a_list_of_lists(graph)
+    # ищем массивы точек, образующих выпуклые кусочки
+    #cycles = get_all_cycles(graph, graph_as_list_of_lists)
+    
+    # записываем кусочки как объекты класса Piece
+    pieces_as_obj = write_pieces_into_classes(cycles, points)
 
+    print(cycles)
 
-        # записываем кусочки как объекты класса Piece
-        pieces_as_obj = write_pieces_into_classes(cycles, points)
-
-        print(cycles)
-
-        return pieces_as_obj, cuts, cycles
-        '''
+    return pieces_as_obj, cuts, cycles
+    '''
 
     pieces_as_objects = write_pieces_into_classes(cycles, points)
     return pieces_as_objects
+
+
+#get_pieces()

@@ -3,9 +3,10 @@ import noNoiseSolution
 
 
 psg.theme('SandyBeach')
-layout = [[psg.Text('Введите количество разрезов', font='Default 12'), psg.InputText(key='num_cuts', justification='r')]] + \
-         [[psg.Text('Введите размер головоломки x*y', font='Default 12'), psg.InputText(key='a', justification='r'), psg.InputText(key='b', justification='r')]] + \
-         [[psg.Button('Собрать')]] + \
+#[[psg.Text('Введите количество разрезов', font='Default 12'), psg.InputText(key='num_cuts', justification='r')]] + \
+#[[psg.Text('Введите размер головоломки x*y', font='Default 12'), psg.InputText(key='a', justification='r'), psg.InputText(key='b', justification='r')]] + \
+
+layout = [[psg.Button('Собрать')]] + \
          [[psg.Image('pictures/initial.png', key='init_img', visible=False, size=(10, 10))]] + \
          [[psg.Image('pictures/0.png', key='i_img', visible=False, size=(10, 10))]] + \
          [[psg.Button('Назад', visible=False, key='back_but'), psg.Button('Далее', visible=False, key='next_but')]]
@@ -27,9 +28,10 @@ while True:
 
     if event == 'Собрать':
         # считываем данные с GUI
-        num_cuts = int(values['num_cuts'])
-        a = float(values['a'])
-        b = float(values['b'])
+        #num_cuts = int(values['num_cuts'])
+        #a = float(values['a'])
+        #b = float(values['b'])
+        num_cuts, a, b = 3, 10, 5
 
         # запускаем алгоритм
         data = noNoiseSolution.noNoiseAlgorithm(num_cuts, a, b)

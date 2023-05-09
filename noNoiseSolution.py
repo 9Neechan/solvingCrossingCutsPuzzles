@@ -1,7 +1,7 @@
 import random
 import matplotlib.pyplot as plt
-from sys import maxsize as INT_MAX
-from collections import deque
+from matplotlib import image
+from PIL import Image
 
 import pieces_generation as pg
 import hardcode_examples as he
@@ -32,19 +32,29 @@ def compare(piece1, np1, piece2, np2):
 def draw_solution(cuts, a, b, cycles, points):
     """Отрисоввает изображения исхдной фигуры с разрезами и итерации решения головоломки"""
 
+    # рандомно выбираем фреску
+    random_img = random.randint(0, 3)
+    img = image.imread(f"frescoes/{random_img}.jpg")
+
     # рисуем исходную фигуру с разрезами
     snapshot_name = "pictures/initial.png"
     x = [0, 0, a, a, 0]
     y = [0, b, b, 0, 0]
-    plt.figure(figsize=(a, b))
+    plt.imshow(img)
+    #plt.figure(figsize=(a, b))
+    #for xy in zip(x, y):
+        #plt.annotate('(%.2f, %.2f)' % xy, xy=xy)
+
     plt.title('Сгенерированный пазл')
-    plt.plot(x, y, 'black', alpha=0.9, lw=4, mec='g', mew=2, ms=5)
+    plt.plot(x, y, 'white', alpha=1, lw=4, mec='g', mew=2, ms=5)
     for i in range(len(cuts)):
         x = [cuts[i][0][0], cuts[i][1][0]]
         y = [cuts[i][0][1], cuts[i][1][1]]
-        plt.plot(x, y, 'black', alpha=0.7, lw=3, mec='g', mew=2, ms=5)
+        plt.plot(x, y, 'white', alpha=1, lw=1.5, mec='g', mew=2, ms=5)
+        #for xy in zip(x, y):
+            #plt.annotate('(%.2f, %.2f)' % xy, xy=xy)
     plt.axis("off")
-    plt.savefig(snapshot_name, dpi=65, bbox_inches='tight')
+    plt.savefig(snapshot_name, dpi=95, bbox_inches='tight')
     plt.close()
 
     # рисуем фрагменты, прибавленные на каждой итерации алгоритма
@@ -54,8 +64,9 @@ def draw_solution(cuts, a, b, cycles, points):
     for p in range(len(true_pairs)):
         snapshot_name = f"pictures/{p}.png"
         plt.title(f'Номер итерации: {p}')
-        plt.figure(figsize=(a, b))
-        plt.plot([0, a], [0, b], 'white', alpha=1, lw=5, mec='g', mew=2, ms=5)
+        #plt.figure(figsize=(a, b))
+        #plt.plot([0, a], [0, b], 'white', alpha=1, lw=5, mec='g', mew=2, ms=5)
+        plt.imshow(img)
 
         # фрагменты, соединяющиеся на данной операции
         iter_cycles = [cycles[true_pairs[p][0][0]], cycles[true_pairs[p][1][0]]]
@@ -72,7 +83,7 @@ def draw_solution(cuts, a, b, cycles, points):
                 y.append(new_p_y)
         # отрисовываем все фрагменты, добавленные к текущей итерации
         for k in range(len(x)):
-            plt.plot(x[k], y[k], 'black', alpha=0.7, lw=3, mec='g', mew=2, ms=5)
+            plt.plot(x[k], y[k], 'black', alpha=1, lw=1.5, mec='g', mew=2, ms=5)
 
         # подсвечиваем стороны фрагментов, которые алгоритм соединил на текущей итерации
         s = true_pairs[p][0][1]
@@ -80,10 +91,10 @@ def draw_solution(cuts, a, b, cycles, points):
             s = len(iter_cycles[0]-1)
         color_x = [points[iter_cycles[0][s-1]][0], points[iter_cycles[0][s]][0]]
         color_y = [points[iter_cycles[0][s-1]][1], points[iter_cycles[0][s]][1]]
-        plt.plot(color_x, color_y, 'red', alpha=1, lw=5, mec='g', mew=2, ms=5)
+        plt.plot(color_x, color_y, 'red', alpha=1, lw=2.5, mec='g', mew=2, ms=5)
 
         plt.axis("off")
-        plt.savefig(snapshot_name, dpi=65, bbox_inches='tight')
+        plt.savefig(snapshot_name, dpi=95, bbox_inches='tight')
         plt.close()
 
 
@@ -93,7 +104,7 @@ def noNoiseAlgorithm(num_cuts, a, b):
     pieces, cuts, pieces_in_points = pg.get_pieces(num_cuts, a, b)
     '''
 
-    n, a, b, cuts, graph, points, cycles = he.example3()
+    n, a, b, cuts, graph, points, cycles = he.big_example2()
     pieces = pg.get_pieces(cycles, points)
 
     print("все кусочки")
