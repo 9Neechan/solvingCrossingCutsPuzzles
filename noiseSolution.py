@@ -1,3 +1,17 @@
+import cv2
+
+
+def get_matrix(n, p):
+    # функция считывает изображение и возвращает матрицу полутонов каждого пикселя
+    adress = 'C:/Users/magla/Downloads/database/s' + str(n) + '/' + str(p) + '.pgm'
+    img = cv2.imread(adress)
+    #matrix = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    return img
+
+
+print(get_matrix(1, 1))
+
+
 def calculate_color_dissimilarity(side1, side2):
     it1, it2 = 0, 0
     dis_counter = 0
