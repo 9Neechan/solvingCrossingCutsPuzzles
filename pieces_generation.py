@@ -1,18 +1,6 @@
 import random
 import math
-
-'''
-a = 3
-b = 6
-n = 3
-'''
-
-MAXN = 1005
-vis = [False for i in range(MAXN)]
-start_node = 0
-all_cycles = [[]]
-aa = 0
-bb = 0
+import networkx as nx
 
 
 class Side:
@@ -113,10 +101,10 @@ def get_graph_matrix(cuts, a, b):
 
     # сортируем точки на разрезах по определенной координате
     for i in range(len(m)):
-        sorted(m[i], key=lambda x: x[0])
+        m[i] = sorted(m[i], key=lambda x: x[0])
 
     for i in range(len(lines)):
-        sorted(lines[i], key=lambda x: x[1])
+        lines[i] = sorted(lines[i], key=lambda x: x[1])
 
     # формируем матрицу смежности
     for i in range(len(m)):
@@ -132,77 +120,20 @@ def get_graph_matrix(cuts, a, b):
     return k, intersect, graph, points
 
 
-def graph_as_a_list_of_lists(graph):
-    """Для каждой вершины составляет список ее смежных вершин"""
+def get_cycles(graph):
     graph_size = len(graph)
-    graph_as_a_list_of_lists = [[] for i in range(graph_size)]
+    cycles = []
+    g = nx.Graph()
+
     for i in range(graph_size):
         for j in range(graph_size):
             if graph[i][j] == 1:
-                graph_as_a_list_of_lists[i].append(j)
-    print(graph_as_a_list_of_lists)
-    return graph_as_a_list_of_lists
-
-'''
-def detect_cycle(node, par, graph_as_a_list_of_lists):
-    global aa, bb
-    vis[node] = True
-    for child in graph_as_a_list_of_lists[node]:
-        if vis[child] == False:
-            if detect_cycle(child, node, graph_as_a_list_of_lists):
-                return True
-        elif child != par:
-            aa = child
-            bb = node
-            return True
-    return False
-
-
-def find_simple_cycle(a, b, graph_as_a_list_of_lists):
-    simple_cycle = []
-    par = [0 for i in range(MAXN)]
-    q = [a]
-    ok = True
-    while len(q) != 0:
-        node = q[0]
-        q.pop(0)
-        vis[node] = True
-        for child in graph_as_a_list_of_lists[node]:
-            if node == a and child == b:
-                continue
-            if not vis[child]:
-                par[child] = node
-                if child == b:
-                    ok = False
-                    break
-                q.append(child)
-                vis[child] = True
-        if not ok:
-            break
-    simple_cycle.append(a)
-    x = b
-    while x != a:
-        simple_cycle.append(x)
-        x = par[x]
-    return simple_cycle
-
-
-def get_all_cycles(graph, graph_as_a_list_of_lists):
-    """Находит вершины, образующие выпуклые кусочки"""
-    global aa, bb
-    graph_size = len(graph)
-    cycles = []
-    vis = [False for i in range(graph_size)]
-    for i in range(graph_size):
-        if detect_cycle(i, -1, graph_as_a_list_of_lists):
-            simple_cycle = []
-            for j in range(graph_size):
-                vis[j] = False
-            find_simple_cycle(aa, bb, graph_as_a_list_of_lists)
-            if simple_cycle not in cycles:
-                cycles.append(simple_cycle)
+                g.add_edge(i, j)
+    for cycle in nx.cycle_basis(g):
+        cycle.append(cycle[0])
+        cycle.append(cycle[1])
+        cycles.append(cycle)
     return cycles
-'''
 
 
 def len_between_two_points(n1, n2, points):
@@ -220,10 +151,13 @@ def angle_between_points(n1, n2, n3, points):
 
 def angle_between_two_lines(n1, n2, n3, n4, points):
     """Ищет угол между двумя прямыми"""
+    '''
     p1, p2, p3, p4 = points[n1], points[n2], points[n3], points[n4]
     cos_fi = ((p2[0]-p1[0])*(p4[0]-p3[0]) + (p2[1]-p1[1])*(p4[1]-p3[1])) / \
              (len_between_two_points(n1, n2, points) * len_between_two_points(n3, n4, points))
     return round(math.acos(cos_fi)*180/math.pi, 3)
+    '''
+    return 90
 
 
 def write_pieces_into_classes(cycles, points):  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!
@@ -254,41 +188,34 @@ def write_pieces_into_classes(cycles, points):  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return pieces_as_objects
 
 
-def get_pieces(cycles, points): #n, a, b):
+def get_pieces(n): #cycles, points, graph): #n, a, b):
     """Возвращает массив объектов класса Piece
        Вызывается из noNoiseSolution.py"""
-
-    '''
-    n = 6
+    #n = 3
     a = 800
     b = 400
 
     # генерируем разрезы
     cuts = generate_cuts(n, a, b)
-    print(cuts)
+    print("cuts", cuts)
 
     # строим граф-матрицу смежности, массив всех точек
     k, intersection_points, graph, points = get_graph_matrix(cuts, a, b)
-    print(points)
-    print(graph)
-    #for el in graph:
-        #print(el)
+    print("points", points)
+    print("graph")
+    for el in graph:
+        print(el)
     
-    # для каждой вершины ищем с какими другими вершинами она соединена
-    graph_as_list_of_lists = graph_as_a_list_of_lists(graph)
     # ищем массивы точек, образующих выпуклые кусочки
-    #cycles = get_all_cycles(graph, graph_as_list_of_lists)
-    
+    cycles = get_cycles(graph)
+    print("cycles")
+    for el in cycles:
+        print(el)
+
     # записываем кусочки как объекты класса Piece
-    pieces_as_obj = write_pieces_into_classes(cycles, points)
-
-    print(cycles)
-
-    return pieces_as_obj, cuts, cycles
-    '''
-
     pieces_as_objects = write_pieces_into_classes(cycles, points)
-    return pieces_as_objects
+
+    return pieces_as_objects, cuts, a, b, cycles, points
 
 
 #get_pieces()

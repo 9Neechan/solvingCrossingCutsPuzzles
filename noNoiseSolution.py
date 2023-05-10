@@ -19,7 +19,7 @@ def compare(piece1, np1, piece2, np2):
                 print(piece1.sides[s1].len, piece2.sides[s2].len)
                 if round(piece1.sides[s1].angles[0]+piece2.sides[s2].angles[1]) == 180 and \
                    round(piece1.sides[s1].angles[1]+piece2.sides[s2].angles[0]) == 180 and \
-                   [[piece1, s1], [piece2, s2]] not in pairs:
+                    [[piece1, s1], [piece2, s2]] not in pairs:
                     pairs.append([[np1, s1], [np2, s2]])
                     n += 1
     if n == 1:
@@ -41,7 +41,6 @@ def draw_solution(cuts, a, b, cycles, points):
     x = [0, 0, a, a, 0]
     y = [0, b, b, 0, 0]
     plt.imshow(img)
-    #plt.figure(figsize=(a, b))
     #for xy in zip(x, y):
         #plt.annotate('(%.2f, %.2f)' % xy, xy=xy)
 
@@ -58,14 +57,26 @@ def draw_solution(cuts, a, b, cycles, points):
     plt.close()
 
     # рисуем фрагменты, прибавленные на каждой итерации алгоритма
+    drawed_pieces = []
     x = []
     y = []
-    drawed_pieces = []
+    wx = []
+    wy = []
+    # заполняем границы для белых кусочков
+    for e in range(len(cycles)):
+        #white_pieces.append(cycles[e])
+        new_p_wx = []
+        new_p_wy = []
+        for q in range(len(cycles[e])-1):
+            new_p_wx.append(points[cycles[e][q]][0])
+            new_p_wy.append(points[cycles[e][q]][1])
+        wx.append(new_p_wx)
+        wy.append(new_p_wy)
+
+    print(len(true_pairs))
     for p in range(len(true_pairs)):
         snapshot_name = f"pictures/{p}.png"
         plt.title(f'Номер итерации: {p}')
-        #plt.figure(figsize=(a, b))
-        #plt.plot([0, a], [0, b], 'white', alpha=1, lw=5, mec='g', mew=2, ms=5)
         plt.imshow(img)
 
         # фрагменты, соединяющиеся на данной операции
@@ -81,31 +92,36 @@ def draw_solution(cuts, a, b, cycles, points):
                     new_p_y.append(points[c[j]][1])
                 x.append(new_p_x)
                 y.append(new_p_y)
-        # отрисовываем все фрагменты, добавленные к текущей итерации
+        # отрисовываем границы всех фрагментов, добавленных к текущей итерации
         for k in range(len(x)):
-            plt.plot(x[k], y[k], 'black', alpha=1, lw=1.5, mec='g', mew=2, ms=5)
+            plt.plot(x[k], y[k], 'white', alpha=1, lw=2.5, mec='w', mew=2, ms=5)
+            if x[k] in wx:
+                wx.remove(x[k])
+                wy.remove(y[k])
+
+        # закрашиваем не найденные фрагменты белым
+        for u in range(len(wx)):
+            plt.plot(wx[u], wy[u], 'white', alpha=0.1, lw=0.1, mec='w', mew=2, ms=5)
+            plt.fill_between(wx[u], wy[u], color='white')
 
         # подсвечиваем стороны фрагментов, которые алгоритм соединил на текущей итерации
         s = true_pairs[p][0][1]
         if s == 0:
-            s = len(iter_cycles[0]-1)
+            s = len(iter_cycles[0])-1
+
         color_x = [points[iter_cycles[0][s-1]][0], points[iter_cycles[0][s]][0]]
         color_y = [points[iter_cycles[0][s-1]][1], points[iter_cycles[0][s]][1]]
-        plt.plot(color_x, color_y, 'red', alpha=1, lw=2.5, mec='g', mew=2, ms=5)
+        plt.plot(color_x, color_y, 'red', alpha=1, lw=1.5, mec='red', mew=2, ms=5)
 
         plt.axis("off")
         plt.savefig(snapshot_name, dpi=95, bbox_inches='tight')
         plt.close()
 
 
-def noNoiseAlgorithm(num_cuts, a, b):
-    '''
+def noNoiseAlgorithm(num_cuts):
     # генерируем кусочки
-    pieces, cuts, pieces_in_points = pg.get_pieces(num_cuts, a, b)
-    '''
-
-    n, a, b, cuts, graph, points, cycles = he.big_example2()
-    pieces = pg.get_pieces(cycles, points)
+    #n, a, b, cuts, graph, points, cycles = he.big_example2()
+    pieces, cuts, a, b, cycles, points = pg.get_pieces(num_cuts)
 
     print("все кусочки")
     for pis in pieces:
@@ -120,40 +136,10 @@ def noNoiseAlgorithm(num_cuts, a, b):
         for j in range(i+1, len(pieces)):
             if i != j:
                 compare(pieces[i], i, pieces[j], j)
-    '''
-    for i in range(len(tru_pairs)):
-        for j in range(i+1, len(tru_pairs)):
-            four = [tru_pairs[i], 0, 0]
-            four[2] = tru_pairs[j]
-            if tru_pairs[i][0][0] != tru_pairs[j][0][0] and \
-               tru_pairs[i][0][0] != tru_pairs[j][1][0] and \
-               tru_pairs[i][1][0] != tru_pairs[j][0][0] and \
-               tru_pairs[i][1][0] != tru_pairs[j][1][0]:
 
-                
-                for el in pairs:
-                    if (tru_pairs[i][0][0] == el[0][0] and (el[1][0] == tru_pairs[j][0][0] or el[1][0] == tru_pairs[j][1][0]) and el[0][1] == )  or \
-                       (tru_pairs[i][0][0] == el[1][0] and (el[0][0] == tru_pairs[j][0][0] or el[0][0] == tru_pairs[j][1][0])): # ищу с кем смержить кусочки из противоположного мержа
-                        lenp_i = pieces[tru_pairs[i][0][0]].sides_amount
-                        lenp_j = pieces[tru_pairs[j][0][0]].sides_amount
-                        if 
-
-                    if (tru_pairs[i][1][0] == el[0][0] and (el[1][0] == tru_pairs[j][0][0] or el[1][0] == tru_pairs[j][1][0])) or \
-                       (tru_pairs[i][1][0] == el[1][0] and (el[0][0] == tru_pairs[j][0][0] or el[0][0] == tru_pairs[j][1][0])):
-            
-            if len(four) == 4 and four[1] != 0:
-                pairs.remove(four[1])
-                pairs.remove(four[3])
-                for elem in four:
-                    if elem not in sol:
-                        sol.append(elem)
-                        '''
-
-    #print(pairs)
-    #print('=====')
     print()
     print("стороны фрагментов, которые надо соединить [номер фрагмента, номер стороны этого фрагмента]")
     print(true_pairs)
 
     draw_solution(cuts, a, b, cycles, points)
-    return len(cycles)
+    return len(true_pairs)
