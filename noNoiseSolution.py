@@ -1,7 +1,6 @@
 import random
 import matplotlib.pyplot as plt
 from matplotlib import image
-from PIL import Image
 
 import pieces_generation as pg
 import hardcode_examples as he
@@ -33,7 +32,7 @@ def draw_solution(cuts, a, b, cycles, points):
     """Отрисоввает изображения исхдной фигуры с разрезами и итерации решения головоломки"""
 
     # рандомно выбираем фреску
-    random_img = random.randint(0, 3)
+    random_img = random.randint(0, 5)
     img = image.imread(f"frescoes/{random_img}.jpg")
 
     # рисуем исходную фигуру с разрезами
@@ -120,8 +119,10 @@ def draw_solution(cuts, a, b, cycles, points):
 
 def noNoiseAlgorithm(num_cuts):
     # генерируем кусочки
-    #n, a, b, cuts, graph, points, cycles = he.big_example2()
-    pieces, cuts, a, b, cycles, points = pg.get_pieces(num_cuts)
+    # pieces, cuts, a, b, cycles, points = pg.get_pieces(num_cuts)
+    n, a, b, cuts, graph, points, cycles = he.big_example6()  # 4, 5, 6
+
+    pieces = pg.get_pieces(n, cycles, points, graph)
 
     print("все кусочки")
     for pis in pieces:

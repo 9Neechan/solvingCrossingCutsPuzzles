@@ -1,4 +1,4 @@
-def big_example1():
+def big_example6():
     a = 800
     b = 400
     n = 6
@@ -16,10 +16,16 @@ def big_example1():
               [18, 9, 7, 17, 18, 9],
               [7, 13, 17, 7, 13],
               [5, 3, 4, 5, 3]]
+
+    print("cuts", cuts)
+    print("points", points)
+    for el in cycles:
+        print(el)
+
     return n, a, b, cuts, graph, points, cycles
 
 
-def big_example2():
+def big_example4():
     a = 800
     b = 400
     n = 4
@@ -32,10 +38,16 @@ def big_example2():
               [5, 11, 12, 5, 11],
               [12, 4, 10, 12, 4],
               [11, 3, 4, 12, 11, 3]]
+
+    print("cuts", cuts)
+    print("points", points)
+    for el in cycles:
+        print(el)
+
     return n, a, b, cuts, graph, points, cycles
 
 
-def big_example3():
+def big_example5():
     a = 800
     b = 400
     n = 5
@@ -51,9 +63,16 @@ def big_example3():
               [16, 12, 10, 16, 12],
               [15, 9, 3, 12, 16, 15, 9],
               [11, 9, 15, 11, 9]]
+
+    print("cuts", cuts)
+    print("points", points)
+    for el in cycles:
+        print(el)
+
     return n, a, b, cuts, graph, points, cycles
 
 
+#######################################################################################################################
 def example1():
     a = 10
     b = 5

@@ -151,16 +151,14 @@ def angle_between_points(n1, n2, n3, points):
 
 def angle_between_two_lines(n1, n2, n3, n4, points):
     """Ищет угол между двумя прямыми"""
-    '''
     p1, p2, p3, p4 = points[n1], points[n2], points[n3], points[n4]
     cos_fi = ((p2[0]-p1[0])*(p4[0]-p3[0]) + (p2[1]-p1[1])*(p4[1]-p3[1])) / \
              (len_between_two_points(n1, n2, points) * len_between_two_points(n3, n4, points))
     return round(math.acos(cos_fi)*180/math.pi, 3)
-    '''
-    return 90
+    #return 90
 
 
-def write_pieces_into_classes(cycles, points):  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1!!!!
+def write_pieces_into_classes(cycles, points):
     """Формирует классы кусочков из наборов точек, принадлежщих им"""
     pieces_as_objects = []
     for el in cycles:
@@ -188,13 +186,14 @@ def write_pieces_into_classes(cycles, points):  # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     return pieces_as_objects
 
 
-def get_pieces(n): #cycles, points, graph): #n, a, b):
+def get_pieces(n, cycles, points, graph): #n, a, b):
     """Возвращает массив объектов класса Piece
        Вызывается из noNoiseSolution.py"""
-    #n = 3
+    n = 3
     a = 800
     b = 400
 
+    '''
     # генерируем разрезы
     cuts = generate_cuts(n, a, b)
     print("cuts", cuts)
@@ -211,11 +210,13 @@ def get_pieces(n): #cycles, points, graph): #n, a, b):
     print("cycles")
     for el in cycles:
         print(el)
-
+    
+    '''
     # записываем кусочки как объекты класса Piece
     pieces_as_objects = write_pieces_into_classes(cycles, points)
 
-    return pieces_as_objects, cuts, a, b, cycles, points
+    #return pieces_as_objects, cuts, a, b, cycles, points
+    return pieces_as_objects
 
 
 #get_pieces()
