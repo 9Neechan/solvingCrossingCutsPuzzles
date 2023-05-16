@@ -32,7 +32,7 @@ def draw_solution(cuts, a, b, cycles, points):
     """Отрисоввает изображения исхдной фигуры с разрезами и итерации решения головоломки"""
 
     # рандомно выбираем фреску
-    random_img = random.randint(0, 5)
+    random_img = random.randint(0, 4)
     img = image.imread(f"frescoes/{random_img}.jpg")
 
     # рисуем исходную фигуру с разрезами
@@ -117,10 +117,20 @@ def draw_solution(cuts, a, b, cycles, points):
         plt.close()
 
 
-def noNoiseAlgorithm(num_cuts):
+def noNoiseAlgorithm(example):
+    global true_pairs
+    global pairs
+
     # генерируем кусочки
     # pieces, cuts, a, b, cycles, points = pg.get_pieces(num_cuts)
-    n, a, b, cuts, graph, points, cycles = he.big_example6()  # 4, 5, 6
+    n, a, b, cuts, graph, points, cycles = 0, 0, 0, [], [], [], []
+
+    if example == 4:
+        n, a, b, cuts, graph, points, cycles = he.big_example4()
+    elif example == 5:
+        n, a, b, cuts, graph, points, cycles = he.big_example5()
+    else:
+        n, a, b, cuts, graph, points, cycles = he.big_example6()
 
     pieces = pg.get_pieces(n, cycles, points, graph)
 
@@ -142,5 +152,11 @@ def noNoiseAlgorithm(num_cuts):
     print("стороны фрагментов, которые надо соединить [номер фрагмента, номер стороны этого фрагмента]")
     print(true_pairs)
 
+    #print(example, "ПРИмер", cuts, a, b, cycles, points)
+
     draw_solution(cuts, a, b, cycles, points)
-    return len(true_pairs)
+    len_true_pairs = len(true_pairs)
+    pairs = []
+    true_pairs = []
+
+    return len_true_pairs

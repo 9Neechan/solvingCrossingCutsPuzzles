@@ -14,7 +14,6 @@ class Side:
 class Piece:
     def __init__(self, sides):
         self.sides = sides
-        self.sides_amount = len(sides)
 
 
 def generate_cuts(num_cuts, a, b):
@@ -210,8 +209,8 @@ def get_pieces(n, cycles, points, graph): #n, a, b):
     print("cycles")
     for el in cycles:
         print(el)
-    
     '''
+
     # записываем кусочки как объекты класса Piece
     pieces_as_objects = write_pieces_into_classes(cycles, points)
 
