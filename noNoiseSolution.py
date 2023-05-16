@@ -100,8 +100,8 @@ def draw_solution(cuts, a, b, cycles, points):
 
         # закрашиваем не найденные фрагменты белым
         for u in range(len(wx)):
-            plt.plot(wx[u], wy[u], 'white', alpha=0.1, lw=0.1, mec='w', mew=2, ms=5)
-            plt.fill_between(wx[u], wy[u], color='white')
+            plt.plot(wx[u], wy[u], 'white', alpha=1, lw=1, mec='b', mew=5, ms=5)
+            plt.fill_between(wx[u], wy[u], facecolor='white')#, color='orange')
 
         # подсвечиваем стороны фрагментов, которые алгоритм соединил на текущей итерации
         s = true_pairs[p][0][1]
@@ -151,8 +151,6 @@ def noNoiseAlgorithm(example):
     print()
     print("стороны фрагментов, которые надо соединить [номер фрагмента, номер стороны этого фрагмента]")
     print(true_pairs)
-
-    #print(example, "ПРИмер", cuts, a, b, cycles, points)
 
     draw_solution(cuts, a, b, cycles, points)
     len_true_pairs = len(true_pairs)

@@ -70,7 +70,6 @@ while True:
 
     # логика кнопки "Назад"
     if event == 'back_but':
-        print("pic n", n)
         n -= 1
         window['i_img'].update(f'pictures/{n}.png')
         window['next_but'].update(disabled=False)
@@ -79,7 +78,6 @@ while True:
 
     # логика кнопки "Далее"
     if event == 'next_but':
-        print("pic n", n)
         n += 1
         window['i_img'].update(f'pictures/{n}.png')
         window['back_but'].update(disabled=False)
